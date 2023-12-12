@@ -2,22 +2,41 @@ import React, { useState, useRef } from "react";
 import "./App.css";
 
 const TodoList = () => {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState([
+  
+  ]);
   const [todoInput, setTodoInput] = useState("");
   const [editIndex, setEditIndex] = useState(null);
   const inputRef = useRef(null);
+
+  console.log("todos", todos);
 
   const addTodo = () => {
     if (todoInput.length > 0) {
       if (editIndex !== null) {
         const updatedTodos = [...todos];
-        updatedTodos[editIndex] = todoInput;
-        setTodos(updatedTodos);
-        setEditIndex(null);
-        setTodoInput("");
+
+        if (updatedTodos[editIndex] === todoInput) {
+          alert("Nothing has changed");
+          setTodoInput(todoInput);
+          setEditIndex(editIndex);
+        } else {
+          updatedTodos[editIndex] = todoInput;
+          setTodos(updatedTodos);
+          setTodoInput("");
+          setEditIndex(null);
+        }
       } else {
-        setTodos([...todos, todoInput]);
-        setTodoInput("");
+        const check = todos.some((val) => {
+          return val.toLowerCase() === todoInput.toLowerCase();
+        });
+
+        if (check) {
+          alert("Already present");
+        } else {
+          setTodos([...todos, todoInput]);
+          setTodoInput("");
+        }
       }
     } else {
       inputRef.current.focus();
